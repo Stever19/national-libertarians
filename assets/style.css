@@ -207,4 +207,8 @@ small.note{color:var(--muted)}
   display: block;
   border-radius: 12px;
 }
+/* FINAL FIX: prevent any image from filling hero */
+.hero img{
+  display: none !important;
+}
 
