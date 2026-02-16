@@ -193,3 +193,18 @@ blockquote{
   color:var(--text);
 }
 small.note{color:var(--muted)}
+/* FIX: keep header logo small */
+.brand { 
+  gap: 12px; 
+}
+
+.brand img.logoimg{
+  width: 38px !important;
+  height: 38px !important;
+  max-width: 38px !important;
+  max-height: 38px !important;
+  object-fit: cover !important;
+  display: block;
+  border-radius: 12px;
+}
+
