@@ -1,18 +1,18 @@
-name: Build site
+name: Auto-build blog & posts
 
 on:
+  push:
+    branches: ["main"]
+
 permissions:
   contents: write
-
-  push:
-    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -20,21 +20,19 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install markdown pyyaml
+        run: pip install markdown pyyaml
 
       - name: Build blog
-        run: |
-          python tools/build.py
+        run: python tools/build.py
 
-            - name: Commit generated files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit generated files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
           git add blog.html posts/*.html
+          git diff --cached --quiet || git commit -m "Auto-build blog"
+          git push
+
           git diff --cached --quiet || git commit -m "Auto-build blog"
           
           git push
