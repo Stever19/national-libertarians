@@ -1,0 +1,33 @@
+name: Build site
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install markdown pyyaml
+
+      - name: Build blog
+        run: |
+          python tools/build.py
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add blog.html posts/*.html
+          git commit -m "Auto-build blog" || echo "No changes"
+          git push
